@@ -40,3 +40,8 @@ function oIm = bd(inImFile)
     % I think that central frequency and scale parameter should be
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
+    
+    
+    %After looking at a few implimentations of the Gabour filters,
+    %most implimentations created a function to generate the different filters
+    %and then applied them to the image in another function.
