@@ -40,8 +40,22 @@ function oIm = bd(inImFile)
     % I think that central frequency and scale parameter should be
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
-    
+    oIm = gaborResponse(gIm);
     
     %After looking at a few implimentations of the Gabour filters,
     %most implimentations created a function to generate the different filters
     %and then applied them to the image in another function.
+    
+    % Show magnitudes of Gabor filters:
+figure('NumberTitle','Off','Name','Magnitudes of Gabor filters');
+for i = 1:6      
+    subplot(2,3,i);        
+    imshow(abs(oIm(:,:,i)),[]);
+end
+
+% Show real parts of Gabor filters:
+figure('NumberTitle','Off','Name','Real parts of Gabor filters');
+for i = 1:6
+    subplot(2,3,i);        
+    imshow(real(oIm(:,:,i)),[]);   
+end
