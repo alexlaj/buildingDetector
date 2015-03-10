@@ -9,4 +9,3 @@ function G = gaborFilter(dir, n, m)
             G(x,y) = 1/(2*pi*sigG^2)*exp(-(U^2+V^2)/(2*sigG^2))*exp(1i*2*pi*f*U);
         end
     end
-    
