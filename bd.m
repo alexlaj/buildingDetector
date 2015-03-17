@@ -2,7 +2,7 @@ function oIm = bd(inImFile)
     % Main function for the building detector.
     % Takes in a screenshot of google maps satellite image and searches for
     % buildings in it.
-    
+    tic
     % Tentative steps
     % 1. Get image into greyscale
     % 2. Preprocess image with 5x5 median image filter
@@ -36,12 +36,9 @@ function oIm = bd(inImFile)
     
     % 3. Gabor filtering
     % Make separate m file for this function.
-    % myGabor(image, direction)
+    [R, oIm]  = gaborResponse(gIm);
     % I think that central frequency and scale parameter should be
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
     
-    
-    %After looking at a few implimentations of the Gabour filters,
-    %most implimentations created a function to generate the different filters
-    %and then applied them to the image in another function.
+    toc
