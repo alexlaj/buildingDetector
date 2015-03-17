@@ -8,6 +8,7 @@ function [R, lMax] = gaborResponse(inIm)
     for i=1:6
         R(:,:,i) = conv2(im, gaborFilter(i*pi/6, filtSize, filtSize));
     end
+    % Crop to get rid of extra stuff from convolution
     R = R(1:n,1:m,:);
 
     % Find local maxima in each 4-neighborhood
