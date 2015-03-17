@@ -1,5 +1,6 @@
 function [R, lMax] = gaborResponse(inIm)
-    im = rgb2gray(inIm);
+    %im = rgb2gray(inIm);
+    im = inIm;
     [n, m] = size(im);
     im = double(im);
     filtSize = 5;
@@ -32,5 +33,5 @@ function [R, lMax] = gaborResponse(inIm)
     subplot(4,4,11), imshow(abs(lMax(:,:,5))), title('Local Max, 4/6');
     subplot(4,4,12), imshow(abs(lMax(:,:,6))), title('Local Max, 5/6');
     % Plot Original Image
-    subplot(4,4,13), imshow(inIm), title('Original Image');
+    subplot(4,4,13), imshow(inIm), title('Original (smoothed) Image');
     

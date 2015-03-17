@@ -1,6 +1,7 @@
 function lMax = localMax(im)
     % Returns a matrix of local maxima found in an area with an eucludian
     % radius of 4.
+    thresh = 0.1;
     [n, m] = size(im);
     lMax = zeros([n m]);
     mask = [0 0 0 0 1 0 0 0 0;
@@ -61,10 +62,10 @@ function lMax = localMax(im)
             % See if the max is larger than the current pixel, can set
             % threshold here later if needed. The paper uses Otsu's
             % auto thresh to set the value.
-            if max(local) > im(x,y)
-                lMax(x,y) = max(local);
+            if max(local) > (im(x,y) + thresh*im(x,y))
+                lMax(x,y) = 1;
             else
-                lMax(x,y) = im(x,y);
+                lMax(x,y) = 0;
             end
         end
     end
