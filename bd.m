@@ -1,4 +1,4 @@
-function oIm = bd(inImFile)
+function [decVect] = bd(inImFile)
     % Main function for the building detector.
     % Takes in a screenshot of google maps satellite image and searches for
     % buildings in it.
@@ -52,7 +52,7 @@ function oIm = bd(inImFile)
     %column is the possible distance of the building center from the
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
-    DecVect = descriptorVectors(R, lMax);
+    [decVect] = descriptorVectors(R, lMax);
     
     
 %{    
