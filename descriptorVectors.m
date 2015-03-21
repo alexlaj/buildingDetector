@@ -1,4 +1,4 @@
-function [ decVect] = descriptorVectors( R, lMax)
+function [decVect] = descriptorVectors( R, lMax)
 %This function will take in the gabour filters and create a descriptor
 %vectors from it. The 4 by K matrix will have location, possible distance
 %from the building center, and the orrientation. 
@@ -8,12 +8,12 @@ for j = 1:i
    features = features|lMax(:,:,j); 
 end
 
-[y, x] = find(features);
-[length, ~] = size(x);
-decVect = zeros(4,length);
+[row, col] = find(features);
+[length, ~] = size(row);
+decVect = zeros(length,4);
 
-%decVect(:,1) = x.';
-%decVect(:,2) = y.';
+decVect(:,1) = row;
+decVect(:,2) = col;
 
 
 %This section finds the length of each feature
@@ -30,19 +30,31 @@ end
 %component. After finding the components we can use the location of a
 %feature to determine its component and therefore edge lenght (or number of
 %pixels in the component).
-numOfComp = 0;
+numOfComp = zeros(i,1);
 for j = 1:i
-    [CC(j), temp] = bwlabel(Rbw(:,:,j),8);
-    numOfComp = numOfComp + temp;
+    [CC(:,:,j), numOfComp(j,1)] = bwlabel(Rbw(:,:,j),8);
 end
 
+arcLength = zeros(length,i);
+for j = 1:i
+    for n = 1:numOfComp
+        arcLength(n,j) = nnz(CC(:,:,j)==n);
+    end
+end
 
-
-%CC = bwconncomp(Rbw, 4)
-
-
+for n =1:length
+    arc = 0;
+    rowVect = decVect(n,1);
+    colVect = decVect(n,2);
+    for j = 1:i
+        if (CC(rowVect,colVect,j)~= 0)
+            arc = arc + arcLength((CC(rowVect,colVect,j)),j);
+        end
+    end
+    decVect(n,3) = arc;
+end
 figure;
-imshow(CC(1));
+imshow(CC(:,:,1));
 
 
 end

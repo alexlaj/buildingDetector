@@ -1,7 +1,7 @@
-function [R, lMax] = gaborResponse(im)
+function [R, lMax] = gaborResponse(inIm)
     %im = rgb2gray(inIm);
-    [n, m] = size(im);
-    im = double(im);
+    [n, m] = size(inIm);
+    im = double(inIm);
     filtSize = 5;
     R = zeros(n+filtSize-1, m+filtSize-1, 6);
     % Get our 6 filtered images, each for a different direction
@@ -32,5 +32,5 @@ function [R, lMax] = gaborResponse(im)
     subplot(4,4,11), imshow(abs(lMax(:,:,5))), title('Local Max, 4/6');
     subplot(4,4,12), imshow(abs(lMax(:,:,6))), title('Local Max, 5/6');
     % Plot Original Image
-    subplot(4,4,13), imshow(im), title('Original Image');
+    subplot(4,4,13), imshow(inIm), title('Original Image');
 end
