@@ -76,7 +76,7 @@ function segmentedImage = colourSeg(im)
                     cnt = cnt-1;
                 end
             end
-            if cnt>0
+            if cnt>3
                 segmentedImage(x,y) = 1;
             else
                 segmentedImage(x,y) = 0;

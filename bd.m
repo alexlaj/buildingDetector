@@ -28,10 +28,12 @@ function [decVect CC] = bd(inImFile)
     else
         gIm = origIm;
     end
-    
+    tmp = colourSeg(origIm);
+    tmp = uint8(tmp);
+    gIm = gIm.*tmp;
     % 2. 5x5 Median filter. Takes median of pixels in 5x5 grid around
     %    center pixel and sets center pixel to that value.
-    gIm = medfilt2(gIm, [5 5]);
+    %gIm = medfilt2(gIm, [5 5]);
     
     % 3. Gabor filtering
     % Make separate m file for this function.
@@ -40,8 +42,7 @@ function [decVect CC] = bd(inImFile)
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
     [R, lMax] = gaborResponse(gIm);
-    test = colourSeg(origIm);
-    test= ~test;
+
     %After looking at a few implimentations of the Gabour filters,
     %most implimentations created a function to generate the different filters
     %and then applied them to the image in another function.
@@ -52,7 +53,7 @@ function [decVect CC] = bd(inImFile)
     %column is the possible distance of the building center from the
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
-    [decVect CC] = descriptorVectors(R, test);
+    [decVect CC] = descriptorVectors(R, lMax);
     
     
 %{    
