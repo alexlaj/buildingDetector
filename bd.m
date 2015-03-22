@@ -40,7 +40,8 @@ function [decVect CC] = bd(inImFile)
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
     [R, lMax] = gaborResponse(gIm);
-    
+    test = colourSeg(origIm);
+    test= ~test;
     %After looking at a few implimentations of the Gabour filters,
     %most implimentations created a function to generate the different filters
     %and then applied them to the image in another function.
@@ -51,7 +52,7 @@ function [decVect CC] = bd(inImFile)
     %column is the possible distance of the building center from the
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
-    [decVect CC] = descriptorVectors(R, lMax);
+    [decVect CC] = descriptorVectors(R, test);
     
     
 %{    
