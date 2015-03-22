@@ -4,15 +4,16 @@ function segmentedImage = colourSeg(im)
     thresh = 0.1;
     [n, m, ~] = size(im);
     segmentedImage = zeros([n m]);
-    mask = [0 0 0 0 1 0 0 0 0;
-            0 0 0 1 1 1 0 0 0;
-            0 0 1 1 1 1 1 0 0;
-            0 1 1 1 1 1 1 1 0;
-            1 1 1 1 1 1 1 1 1;
-            0 1 1 1 1 1 1 1 0;
-            0 0 1 1 1 1 1 0 0;
-            0 0 0 1 1 1 0 0 0;
-            0 0 0 0 1 0 0 0 0];
+    %mask = [0 0 0 0 1 0 0 0 0;
+    %        0 0 0 1 1 1 0 0 0;
+    %        0 0 1 1 1 1 1 0 0;
+    %        0 1 1 1 1 1 1 1 0;
+    %        1 1 1 1 1 1 1 1 1;
+    %        0 1 1 1 1 1 1 1 0;
+    %        0 0 1 1 1 1 1 0 0;
+    %        0 0 0 1 1 1 0 0 0;
+    %        0 0 0 0 1 0 0 0 0];
+    mask = ones([9 9]);
     mask = logical(mask);
     tmpMask = zeros([n m]);
     % 1s are with a ecludian radius of 4 of the center pixel
@@ -67,12 +68,18 @@ function segmentedImage = colourSeg(im)
             red = im(x,y,1);
             green = im(x,y,2);
             blue = im(x,y,3);
+            cnt = 0;
             for xx = 1:nn
                 if (localR(xx)<(red+thresh*red)) && (localR(xx)>(red-thresh*red)) && (localG(xx)<(green+thresh*green)) && (localG(xx)>(green-thresh*green)) && (localB(xx)<(blue+thresh*blue)) && (localB(xx)>(blue-thresh*blue))
-                    segmentedImage(x,y) = 1;
+                    cnt = cnt+1;
                 else
-                    segmentedImage(x,y) = 0;
+                    cnt = cnt-1;
                 end
+            end
+            if cnt>0
+                segmentedImage(x,y) = 1;
+            else
+                segmentedImage(x,y) = 0;
             end
         end
     end
