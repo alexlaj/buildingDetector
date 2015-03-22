@@ -60,7 +60,6 @@ maxarc = max(decVect(:,3));
 
 figure
 imshow(features);
-title(['All feature from lMax'])
 
 figure
 imshow(lMax(:,:,1))
