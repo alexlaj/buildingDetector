@@ -1,8 +1,7 @@
-function [decVect CC] = bd(inImFile)
+function [Edge, Color, Centroids] = bd(inImFile)
     % Main function for the building detector.
     % Takes in a screenshot of google maps satellite image and searches for
     % buildings in it.
-    
     % Tentative steps
     % 1. Get image into greyscale
     % 2. Preprocess image with 5x5 median image filter
@@ -29,10 +28,13 @@ function [decVect CC] = bd(inImFile)
     else
         gIm = origIm;
     end
+    cIm = colourSeg(origIm);
+    %tmp = uint8(tmp);
+    %gIm = gIm.*tmp;
     
     % 2. 5x5 Median filter. Takes median of pixels in 5x5 grid around
     %    center pixel and sets center pixel to that value.
-    gIm = medfilt2(gIm, [5 5]);
+    %gIm = medfilt2(gIm, [5 5]);
     
     % 3. Gabor filtering
     % Make separate m file for this function.
@@ -41,7 +43,7 @@ function [decVect CC] = bd(inImFile)
     % hardcoded in like they were in the paper. They may have to be
     % adjusted for our image set.
     [R, lMax] = gaborResponse(gIm);
-    
+
     %After looking at a few implimentations of the Gabour filters,
     %most implimentations created a function to generate the different filters
     %and then applied them to the image in another function.
@@ -52,7 +54,7 @@ function [decVect CC] = bd(inImFile)
     %column is the possible distance of the building center from the
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
-    [decVect CC] = descriptorVectors(R, lMax);
+    [Edge, Color, Centroids] = descVec(cIm, lMax);
     
     
 %{    
