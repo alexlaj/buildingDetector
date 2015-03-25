@@ -74,6 +74,12 @@ sc = regionprops(Color,'centroid');
 Centroids = cat(1, sc.Centroid);
 Centroids(~any(~isnan(Centroids), 2),:)=0;
 
+[ptx, pty, ~] = find(Centriods);
+dist = norm(ptx-pty);
+combine = dist(dist<50);
+combineIndex = zeros([n1 m1]);
+
+combine = Centroids
 
 figure
 imshow(Edge);
@@ -83,9 +89,6 @@ figure
 imshow(Color)
 title(['All feature from Colour'])
 
-figure
-imshow(combineIndex)
-title(['should combine'])
 
 figure
 imshow(cat(3, Color, Edge, Edge));

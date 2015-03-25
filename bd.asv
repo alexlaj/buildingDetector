@@ -24,24 +24,24 @@ function [Edge, Color, Centroids] = bd(inImFile)
     % 1. Greyscale
     origIm = imread(inImFile);
     [n, m, z] = size(origIm);
-
     if (z == 3)
         gIm = rgb2gray(origIm);
     else
         gIm = origIm;
     end
-    cIm = colourSeg(origIm);
+    cIm = colourSeg(origIm,1.1);
     cIm = uint8(cIm);
     tmp(:,:,1) = cIm.*origIm(:,:,1);
     tmp(:,:,2) = cIm.*origIm(:,:,2);
     tmp(:,:,3) = cIm.*origIm(:,:,3);
     cIm = colourSeg(tmp);
-    %cIm = uint8(cIm);
-    %gIm = gIm.*cIm;
+    tmp2 = cIm;
+    tmp2 = uint8(tmp2);
+    gIm = gIm.*tmp2;
     
     % 2. 5x5 Median filter. Takes median of pixels in 5x5 grid around
     %    center pixel and sets center pixel to that value.
-    gIm = medfilt2(gIm, [5 5]);
+    %gIm = medfilt2(gIm, [5 5]);
     
     % 3. Gabor filtering
     % Make separate m file for this function.
@@ -62,13 +62,10 @@ function [Edge, Color, Centroids] = bd(inImFile)
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
     [Edge, Color, Centroids] = descVec(cIm, lMax);
-    
-    
-    
     figure
     imshow(origIm);
     hold on
-    plot(Centroids(:,1),Centroids(:,2), 'r+')
+    plot(Centroids(:,1),Centroids(:,2), 'b*')
     title(['lMax in Cyan, Colour in Red'])
     hold off
     
