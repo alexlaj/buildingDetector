@@ -1,4 +1,5 @@
-function [Edge, Color, Centroids] = bd(inImFile)
+function [Edge, Color, Centroids, Centers] = bd(inImFile)
+    tic
     % Main function for the building detector.
     % Takes in a screenshot of google maps satellite image and searches for
     % buildings in it.
@@ -23,18 +24,24 @@ function [Edge, Color, Centroids] = bd(inImFile)
     % 1. Greyscale
     origIm = imread(inImFile);
     [n, m, z] = size(origIm);
+
     if (z == 3)
         gIm = rgb2gray(origIm);
     else
         gIm = origIm;
     end
     cIm = colourSeg(origIm);
-    %tmp = uint8(tmp);
-    %gIm = gIm.*tmp;
+    cIm = uint8(cIm);
+    tmp(:,:,1) = cIm.*origIm(:,:,1);
+    tmp(:,:,2) = cIm.*origIm(:,:,2);
+    tmp(:,:,3) = cIm.*origIm(:,:,3);
+    cIm = colourSeg(tmp);
+    %cIm = uint8(cIm);
+    %gIm = gIm.*cIm;
     
     % 2. 5x5 Median filter. Takes median of pixels in 5x5 grid around
     %    center pixel and sets center pixel to that value.
-    %gIm = medfilt2(gIm, [5 5]);
+    gIm = medfilt2(gIm, [5 5]);
     
     % 3. Gabor filtering
     % Make separate m file for this function.
@@ -54,8 +61,20 @@ function [Edge, Color, Centroids] = bd(inImFile)
     %column is the possible distance of the building center from the
     %feature point (Lk) and the last is the dominant orientation (Beta)
     
-    [Edge, Color, Centroids] = descVec(cIm, lMax);
+    [Edge, Color, Centroids, Vote] = descVec(cIm, lMax);
+    [Centers, ~] = size(Centroids);
     
+    
+    figure
+    imshow(origIm);
+    hold on
+    for i = 1:Centers
+        if(Vote(i,1)>=10)
+            plot(Centroids(i,1),Centroids(i,2), 'r+')
+        end
+    end
+    title(['lMax in Cyan, Colour in Red'])
+    hold off
     
 %{    
     % Show magnitudes of Gabor filters:
@@ -64,7 +83,6 @@ for i = 1:6
     subplot(2,3,i);        
     imshow(abs(oIm(:,:,i)),[]);
 end
-
 % Show real parts of Gabor filters:
 figure('NumberTitle','Off','Name','Real parts of Gabor filters');
 for i = 1:6
@@ -72,4 +90,5 @@ for i = 1:6
     imshow(real(oIm(:,:,i)),[]);   
 end
 %}
+    toc
     end

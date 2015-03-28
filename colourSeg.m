@@ -1,7 +1,8 @@
 function [segmentedImage] = colourSeg(im)
     % Returns a matrix of local maxima found in an area with an eucludian
     % radius of 4.
-    thresh = 0.1;
+    cThresh = 0.1;
+    gThresh = 1.08;
     [n, m, ~] = size(im);
     segmentedImage = zeros([n m]);
     %mask = [0 0 0 0 1 0 0 0 0;
@@ -69,20 +70,28 @@ function [segmentedImage] = colourSeg(im)
             green = im(x,y,2);
             blue = im(x,y,3);
             cnt = 0;
-            for xx = 1:nn
-                if (localR(xx)<(red+thresh*red)) && (localR(xx)>(red-thresh*red)) && (localG(xx)<(green+thresh*green)) && (localG(xx)>(green-thresh*green)) && (localB(xx)<(blue+thresh*blue)) && (localB(xx)>(blue-thresh*blue))
-                    cnt = cnt+1;
-                else
-                    cnt = cnt-1;
-                end
-            end
-            if cnt>3
-                segmentedImage(x,y) = 1;
+            % Try to remove green
+            % Checks if G is a percentage higher than R and B
+            if im(x,y,2) > im(x,y,1)*gThresh && im(x,y,2) > im(x,y,3)*gThresh 
+                segmentedImage(x,y) = 0; 
+            % If pixel is completely black do not count as a segment 
+            % This is mostly for the second run through 
+            elseif im(x,y,1)==0 && im(x,y,2)==0 && im(x,y,3)==0 
+                segmentedImage(x,y) = 0; 
             else
-                segmentedImage(x,y) = 0;
+                for xx = 1:nn
+                    if (localR(xx)<(red+cThresh*red)) && (localR(xx)>(red-cThresh*red)) && (localG(xx)<(green+cThresh*green)) && (localG(xx)>(green-cThresh*green)) && (localB(xx)<(blue+cThresh*blue)) && (localB(xx)>(blue-cThresh*blue))
+                        cnt = cnt+1;
+                    else
+                        cnt = cnt-1;
+                    end
+                end
+                if cnt>2
+                    segmentedImage(x,y) = 1;
+                else
+                    segmentedImage(x,y) = 0;
+                end
             end
         end
     end
-    
-
     
