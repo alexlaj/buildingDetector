@@ -1,6 +1,7 @@
 function G = gaborFilter(dir, n, m)
+    % Creates a Gabor filter for a given direction and matrix size.
     f = 0.65;
-    sigG = 1.5;
+    sigG = 2.5;
     G = zeros([n m]);
     for x=1:n
         for y=1:m
